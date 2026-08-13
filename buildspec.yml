@@ -1,0 +1,31 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - echo "Installing kubectl..."
+      - curl -O https://s3.us-west-2.amazonaws.com/amazon-eks/1.29.0/2024-01-04/bin/linux/amd64/kubectl
+      - chmod +x ./kubectl
+      - mkdir -p $HOME/bin && cp ./kubectl $HOME/bin/kubectl && export PATH=$HOME/bin:$PATH
+  pre_build:
+    commands:
+      - echo "Logging in to Amazon ECR..."
+      - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 687848809140.dkr.ecr.us-east-1.amazonaws.com
+      - REPOSITORY_URI=687848809140.dkr.ecr.us-east-1.amazonaws.com/brain-tasks-app
+      - IMAGE_TAG=latest
+  build:
+    commands:
+      - echo "Build started on date"
+      - echo "Building the Docker image..."
+      - docker build -t $REPOSITORY_URI:$IMAGE_TAG .
+  post_build:
+    commands:
+      - echo "Build completed on date"
+      - echo "Pushing the Docker image to ECR..."
+      - docker push $REPOSITORY_URI:$IMAGE_TAG
+      - echo "Logging into Amazon EKS..."
+      - aws eks update-kubeconfig --region us-east-1 --name brain-tasks-cluster
+      - echo "Deploying to Kubernetes cluster..."
+      - kubectl apply -f k8s/deployment.yaml
+      - kubectl apply -f k8s/service.yaml
+      - echo "Deployment completed successfully!"

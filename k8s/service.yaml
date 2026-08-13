@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: brain-tasks-app-service
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-type: "nlb"
+    service.beta.kubernetes.io/aws-load-balancer-scheme: "internet-facing"
+    service.beta.kubernetes.io/aws-load-balancer-subnets: "subnet-04572f4f6ae1cb7d6, subnet-0d5bb1e9b042f7450, subnet-0b0c8678a4390034e"
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+    targetPort: 80
+  selector:
+    app: brain-tasks-app

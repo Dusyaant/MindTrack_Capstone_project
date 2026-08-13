@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: brain-tasks-app
+  labels:
+    app: brain-tasks-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: brain-tasks-app
+  template:
+    metadata:
+      labels:
+        app: brain-tasks-app
+    spec:
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
+      containers:
+      - name: brain-tasks-app
+        image: 687848809140.dkr.ecr.us-east-1.amazonaws.com/brain-tasks-app:latest
+        ports:
+        - containerPort: 80
