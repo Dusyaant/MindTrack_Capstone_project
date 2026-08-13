@@ -1,91 +1,71 @@
-DevOps Practice Project – Dist Directory
+# 🧠 Brain Tasks App - AWS EKS & CI/CD Deployment
 
-This repository contains the production-ready build files (dist folder) for DevOps practice and deployment exercises.
+## 🚀 Project Overview
+This repository contains the production-ready deployment of the **Brain Tasks App**. The application was successfully dockerized, pushed to Amazon Elastic Container Registry (ECR), and deployed to a Kubernetes cluster using Amazon Elastic Kubernetes Service (EKS). Continuous Integration and Deployment (CI/CD) were configured using AWS CodeBuild and AWS CodePipeline.
 
-It is intentionally structured to help learners focus on CI/CD pipelines, hosting, containerization, and infrastructure setup rather than application development.
+## 🛠️ Tech Stack & Architecture
+- **Containerization:** Docker, Amazon ECR
+- **Orchestration:** Kubernetes, Amazon EKS, `kubectl`, `eksctl`
+- **CI/CD Automation:** AWS CodeBuild, AWS CodePipeline, `buildspec.yml`
+- **Monitoring:** Amazon CloudWatch Logs
 
-📁 What This Repository Contains
+## ⚠️ AWS Account Restrictions (Disclaimer)
+- **Load Balancer ARN:** Automated creation of the public Load Balancer ARN was blocked by an AWS environment restriction (`OperationNotPermitted`). 
+- **CI/CD Execution:** The pipeline and `buildspec.yml` are fully configured with the correct IAM roles. However, execution was blocked by an AWS Free Tier quota restriction (`Cannot have more than 0 builds in queue for the account`). 
+- **Resolution:** **Local port-forwarding and NodePort (Public IP) routing** were successfully utilized to bypass the Load Balancer restriction and verify the EKS deployment live in the cloud.
 
-dist/ – Compiled and production-ready static files
+---
 
-HTML
+## 📸 Proof of Execution
 
-CSS
+### 1. Application Running Live (Bypassing LB Block)
+![App on Public IP](screenshots/app-running-public-ip.png)
+*Application accessed successfully over the internet via the EC2 worker node's public IP and NodePort.*
 
-JavaScript
+### 2. Kubernetes Pods and Services Active
+![K8s Status](screenshots/k8s-status.png)
+*EKS Cluster successfully running the deployment and service.*
 
-Assets (images, fonts, etc.)
+### 3. Docker Image in AWS ECR
+![ECR Repo](screenshots/ecr-repo.png)
+*Containerized application pushed to Elastic Container Registry.*
 
-These files are ready to deploy to:
+### 4. AWS EKS Cluster (Active)
+![EKS Cluster](screenshots/eks-cluster.png)
+*Kubernetes cluster successfully provisioned and active.*
 
-Web servers (Nginx / Apache)
+### 5. CI/CD Pipeline & CodeBuild Configuration
+**CodeBuild Project & GitHub Source Connection:**
+![CodeBuild Overview](screenshots/codebuild-overview.png)
+![GitHub Source](screenshots/codebuild-github-source.png)
 
-Cloud platforms (AWS S3, Azure Blob, GCP Storage)
+**Privileged Environment (Docker Ready):**
+![Environment](screenshots/codebuild-environment-privileged.png)
 
-Containerized environments (Docker + Nginx)
+**Buildspec Target & CloudWatch Config:**
+![Buildspec](screenshots/codebuild-buildspec-config.png)
+![CloudWatch](screenshots/codebuild-cloudwatch-logs.png)
 
-Kubernetes clusters
+---
 
-CI/CD pipeline demonstrations
+## 💻 Setup & Deployment Instructions
+1. **Clone the repository:**
+   ```bash
+   git clone [https://github.com/Dusyaant/MindTrack_Capstone_project.git](https://github.com/Dusyaant/MindTrack_Capstone_project.git)
 
-🎯 Purpose of This Repository
 
-This repository is designed for:
 
-DevOps beginners
+2. **Build and push the Docker image:**
+```bash
+docker build -t brain-tasks-app .
+docker push <your-ecr-uri>/brain-tasks-app:latest
 
-CI/CD practice
+```
 
-Deployment pipeline testing
 
-Docker & Kubernetes deployment exercises
+3. **Deploy to Kubernetes (EKS):**
+```bash
+kubectl apply -f k8s/deployment.yaml
+kubectl apply -f k8s/service.yaml
 
-Web server configuration practice
-
-Reverse proxy and load balancer setup
-
-The goal is to simulate real-world deployment scenarios using already built application files.
-
-❓ Why is there NO package.json?
-
-You may notice that this repository does not include:
-
-package.json
-
-node_modules
-
-Source code (src/)
-
-Build tools configuration
-
-✅ Reason:
-
-This repository only contains the final production build output (dist), not the development source code.
-
-In a typical project:
-
-Developers write source code.
-
-The project is built using tools like:
-
-Node.js
-
-Webpack
-
-Vite
-
-React (or other frameworks)
-
-A dist/ folder is generated.
-
-Only the production build is deployed to servers.
-
-This repository represents step 4 only.
-
-Since this is already the compiled output:
-
-No dependencies are required
-
-No build process is required
-
-No package.json is needed
+```
