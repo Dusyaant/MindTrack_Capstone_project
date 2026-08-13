@@ -53,7 +53,7 @@ This repository contains the production-ready deployment of the **Brain Tasks Ap
    ```bash
    git clone [https://github.com/Dusyaant/MindTrack_Capstone_project.git](https://github.com/Dusyaant/MindTrack_Capstone_project.git)
 
-```
+
 
 2. **Build and push the Docker image:**
 ```bash
@@ -67,11 +67,5 @@ docker push <your-ecr-uri>/brain-tasks-app:latest
 ```bash
 kubectl apply -f k8s/deployment.yaml
 kubectl apply -f k8s/service.yaml
-
-```
-
-
-
-```
 
 ```
